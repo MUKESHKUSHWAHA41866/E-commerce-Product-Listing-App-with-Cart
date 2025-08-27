@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         hostname: "picsum.photos",
       },
       { protocol: "https", hostname: "m.media-amazon.com" }, // <-- add this
+      {
+        protocol: "https",
+        hostname: "**", // allow all https hosts
+      },
     ],
   },
 };
