@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+ # Ecommerce (Next.js + Prisma + MongoDB)
 
-## Getting Started
+A minimal ecommerce demo built with **Next.js 15**, **React 19**, **TypeScript**, **Prisma**, **MongoDB**, **Zod**, and **React Query**.
 
-First, run the development server:
+---
+
+## 🚀 Live Demo
+
+- **App:**  https://e-commerce-product-listing-app-with.vercel.app/  
+
+- **API base URL:** (http://localhost:3000)
+
+> Tip: deploy to **Vercel**. Add the same `.env` variables in your Vercel project → Settings → Environment Variables.
+
+---
+
+## 🧰 Tech Stack
+
+- **Framework:** Next.js 15 (App Router, Server Routes)
+
+- **UI:** React 19, Tailwind CSS 4, Framer Motion
+
+- **Forms & Validation:** React Hook Form + Zod
+
+- **Data:** Prisma ORM + MongoDB
+
+- **State/Network:** TanStack Query (React Query), Zustand
+
+- **Auth:** JWT (via `jose`)
+
+- **Tooling:** TypeScript 5, ESLint 9 (Flat Config), Turbopack
+
+
+---
+
+## 🛠️ Setup Instructions
+
+### 1) Clone & install
 
 ```bash
+
+git clone <your-repo-url>
+
+cd my-project    
+            # go to the project root
+npm i
+
+
+2) Create .env in the project root
+
+add .env file  
+
+# Database (MongoDB Atlas connection string)
+DATABASE_URL=""
+
+# Node environment
+NODE_ENV=development
+
+# JWT secret (use a long, random string in real deployments)
+JWT_SECRET="a-very-long-random-secret-string"
+
+3) Generate Prisma client & push schema (first run)
+
+# Prisma generates automatically via `postinstall`, but you can run:
+npx prisma generate
+
+# Create collections in MongoDB based on your Prisma schema
+npx prisma db push
+
+4) Run the dev server
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+API Endpoints
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Base URL (local): http://localhost:3000
 
-## Learn More
+All endpoints are standard Next.js Route Handlers under /app/api/*.
 
-To learn more about Next.js, take a look at the following resources:
+### Auth
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### `POST /api/auth/signup`
+Create a new user.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+POST /api/auth/login
 
-## Deploy on Vercel
+Categories
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+GET /api/categories
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+List categories.
+
+POST /api/categories
+
+Create a category.
+
+
+Products
+
+GET /api/products
+
+List products (with pagination).
+
+POST /api/products
+
+
+GET /api/products/:id
+
+Get one product by id.
+
+PUT /api/products/:id
+
+Update a product.
+
+
+Cart
+
+POST /api/cart/add
+
+Add an item to the cart.
