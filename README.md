@@ -8,6 +8,14 @@ A minimal ecommerce demo built with **Next.js 15**, **React 19**, **TypeScript**
 
 - **App:**  https://e-commerce-product-listing-app-with.vercel.app/  
 
+**Admin user email :**  mukesh@gmail.com
+
+**password:** 123456
+
+**user email id :**  mukesh1@gmail.com
+
+**password :** 123456
+
 - **API base URL:** (http://localhost:3000)
 
 > Tip: deploy to **Vercel**. Add the same `.env` variables in your Vercel project → Settings → Environment Variables.
