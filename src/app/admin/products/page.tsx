@@ -1,22 +1,4 @@
-// import { prisma } from "@/lib/prisma";
-// import ProductsTable from "@/components/ProductsTable";
-
-// export default async function AdminProductsPage() {
-//   const products = await prisma.product.findMany({
-//     include: { category: true },
-//     orderBy: { createdAt: "desc" },
-//   });
-
-//   return (
-//     <div className="flex min-h-[80vh] flex-col items-center justify-start px-4 py-8">
-//       <h1 className="mb-6 text-3xl font-semibold">Manage Products</h1>
-//       <div className="w-full max-w-6xl">
-//         <ProductsTable products={products} />
-//       </div>
-//     </div>
-//   );
-// }
-
+ 
 
 
 import { prisma } from "@/lib/prisma";

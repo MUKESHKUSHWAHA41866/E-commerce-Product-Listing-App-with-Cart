@@ -1,19 +1,4 @@
-// "use client";
-// import { useSearchFilterStore } from "@/store/useSearchFilterStore";
-
-// export default function SearchBar() {
-//   const { search, setSearch } = useSearchFilterStore();
-//   return (
-//     <input
-//       value={search}
-//       onChange={(e) => setSearch(e.target.value)}
-//       placeholder="Search products..."
-//       className="w-full border rounded-xl px-4 py-2"
-//     />
-//   );
-// }
-
-
+ 
 
 
 "use client";

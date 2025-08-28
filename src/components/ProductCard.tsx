@@ -1,36 +1,4 @@
-// "use client";
-// import Image from "next/image";
-// import { useCartStore } from "@/store/useCartStore";
-
-// export default function ProductCard({ p }: { p: any }) {
-//   const add = useCartStore((s) => s.add);
-//   return (
-//     <div className="rounded-2xl border p-4 space-y-3">
-//       <div className="relative w-full aspect-square overflow-hidden rounded-xl">
-//         <Image src={p.imageUrl} alt={p.title} fill className="object-cover" />
-//       </div>
-//       <div className="font-medium">{p.title}</div>
-//       <div className="text-sm opacity-70 line-clamp-2">{p.description}</div>
-//       <div className="flex items-center justify-between">
-//         <span className="font-semibold">${Number(p.price).toFixed(2)}</span>
-//         <button
-//           onClick={() =>
-//             add({
-//               productId: p.id,
-//               title: p.title,
-//               price: Number(p.price),
-//               imageUrl: p.imageUrl,
-//               quantity: 1,
-//             })
-//           }
-//           className="rounded-xl border px-3 py-1"
-//         >
-//           Add to cart
-//         </button>
-//       </div>
-//     </div>
-//   );
-// }
+ 
 
 
 
