@@ -42,10 +42,122 @@
 //   );
 // }
 
+
+
+// "use client";
+// import { useForm } from "react-hook-form";
+// import { zodResolver } from "@hookform/resolvers/zod";
+// import { productCreateSchema, type ProductCreateInput } from "@/lib/validations";
+
+// export default function AddProductForm({
+//   categories,
+// }: {
+//   categories: { id: string; name: string }[];
+// }) {
+//   const {
+//     register,
+//     handleSubmit,
+//     formState: { errors, isSubmitting },
+//   } = useForm<ProductCreateInput>({
+//     resolver: zodResolver(productCreateSchema),
+//   });
+
+//   const onSubmit = async (data: ProductCreateInput) => {
+//     await fetch("/api/products", {
+//       method: "POST",
+//       body: JSON.stringify(data),
+//     });
+//     location.reload();
+//   };
+
+//   return (
+//     <form
+//       onSubmit={handleSubmit(onSubmit)}
+//       className="w-full max-w-2xl rounded-2xl bg-white/5 p-10 shadow-xl backdrop-blur-lg space-y-6"
+//     >
+//       {/* Title */}
+//       <div>
+//         <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">Title</label>
+//         <input
+//           {...register("title")}
+//           placeholder="Product title"
+//           className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm outline-none focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/30"
+//         />
+//       </div>
+
+//       {/* Price */}
+//       <div>
+//         <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">Price</label>
+//         <input
+//           type="number"
+//           step="0.01"
+//           {...register("price", { valueAsNumber: true })}
+//           placeholder="e.g. 19.99"
+//           className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm outline-none focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/30"
+//         />
+//       </div>
+
+//       {/* Description */}
+//       <div>
+//         <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">Description</label>
+//         <textarea
+//           {...register("description")}
+//           placeholder="Product description"
+//           className="w-full min-h-[100px] rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm outline-none focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/30"
+//         />
+//       </div>
+
+//       {/* Image URL */}
+//       <div>
+//         <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">Image URL</label>
+//         <input
+//           {...register("imageUrl")}
+//           placeholder="https://example.com/image.jpg"
+//           className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm outline-none focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/30"
+//         />
+//       </div>
+
+//       {/* Category */}
+//       <div>
+//         <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">Category</label>
+//         <select
+//           {...register("categoryId")}
+//           className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm outline-none focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/30"
+//         >
+//           {categories.map((c) => (
+//             <option key={c.id} value={c.id}>
+//               {c.name}
+//             </option>
+//           ))}
+//         </select>
+//       </div>
+
+//       {/* Submit */}
+//       <div className="pt-2">
+//         <button
+//           disabled={isSubmitting}
+//           className="w-full rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white shadow-md hover:opacity-90 cursor-pointer"
+//         >
+//           {isSubmitting ? "Adding..." : "Add Product"}
+//         </button>
+//       </div>
+//     </form>
+//   );
+// }
+
+
+
+
+
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { productCreateSchema, type ProductCreateInput } from "@/lib/validations";
+import { productCreateSchema } from "@/lib/validations";
+import { z } from "zod";
+
+// Correct typing with z.coerce.number()
+type ProductCreateFormValues = z.input<typeof productCreateSchema>;
+type ProductCreateOutput = z.output<typeof productCreateSchema>;
 
 export default function AddProductForm({
   categories,
@@ -55,14 +167,22 @@ export default function AddProductForm({
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<ProductCreateInput>({
+    formState: { isSubmitting },
+  } = useForm<ProductCreateFormValues, any, ProductCreateOutput>({
     resolver: zodResolver(productCreateSchema),
+    defaultValues: {
+      title: "",
+      price: 0 as unknown as ProductCreateFormValues["price"],
+      description: "",
+      categoryId: categories[0]?.id ?? "",
+      imageUrl: "",
+    },
   });
 
-  const onSubmit = async (data: ProductCreateInput) => {
+  const onSubmit = async (data: ProductCreateOutput) => {
     await fetch("/api/products", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
     location.reload();
@@ -75,52 +195,67 @@ export default function AddProductForm({
     >
       {/* Title */}
       <div>
-        <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">Title</label>
+        <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">
+          Title
+        </label>
         <input
           {...register("title")}
           placeholder="Product title"
-          className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm outline-none focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/30"
+          className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm 
+                     outline-none transition focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/30"
         />
       </div>
 
       {/* Price */}
       <div>
-        <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">Price</label>
+        <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">
+          Price
+        </label>
         <input
           type="number"
           step="0.01"
-          {...register("price", { valueAsNumber: true })}
+          {...register("price")}
           placeholder="e.g. 19.99"
-          className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm outline-none focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/30"
+          className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm 
+                     outline-none transition focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/30"
         />
       </div>
 
       {/* Description */}
       <div>
-        <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">Description</label>
+        <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">
+          Description
+        </label>
         <textarea
           {...register("description")}
           placeholder="Product description"
-          className="w-full min-h-[100px] rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm outline-none focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/30"
+          className="w-full min-h-[100px] rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm 
+                     outline-none transition focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/30"
         />
       </div>
 
       {/* Image URL */}
       <div>
-        <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">Image URL</label>
+        <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">
+          Image URL
+        </label>
         <input
           {...register("imageUrl")}
           placeholder="https://example.com/image.jpg"
-          className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm outline-none focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/30"
+          className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm 
+                     outline-none transition focus:border-purple-400/50 focus:ring-2 focus:ring-purple-400/30"
         />
       </div>
 
       {/* Category */}
       <div>
-        <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">Category</label>
+        <label className="mb-2 block text-sm font-medium text-zinc-200 text-left">
+          Category
+        </label>
         <select
           {...register("categoryId")}
-          className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm outline-none focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/30"
+          className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-sm 
+                     outline-none transition focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/30"
         >
           {categories.map((c) => (
             <option key={c.id} value={c.id}>
@@ -134,7 +269,8 @@ export default function AddProductForm({
       <div className="pt-2">
         <button
           disabled={isSubmitting}
-          className="w-full rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 px-5 py-3 text-sm font-medium text-white shadow-md hover:opacity-90 cursor-pointer"
+          className="w-full rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 px-5 py-3 text-sm 
+                     font-medium text-white shadow-md hover:opacity-90 cursor-pointer"
         >
           {isSubmitting ? "Adding..." : "Add Product"}
         </button>
